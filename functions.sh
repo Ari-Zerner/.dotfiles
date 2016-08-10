@@ -79,3 +79,13 @@ function hash() {
     then rm "$FILE"
     fi
 }
+
+function checkmerge() {
+  if [ $# -eq 2 ]
+  then
+    git checkout $2
+    git merge $1
+  else
+    echo "Usage: checkmerge src dest"
+  fi
+}
