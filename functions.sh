@@ -41,14 +41,6 @@ function ssh-copy-id() {
     cat ~/.ssh/id_rsa.pub | ssh $1 "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"
 }
 
-function seup() {
-    cdse
-    svn up
-    rm -r accounts/migrations
-    pymanage makemigrations
-    pymanage migrate
-}
-
 function hash() {
     if [[ $1 == "-m" ]]
     then
