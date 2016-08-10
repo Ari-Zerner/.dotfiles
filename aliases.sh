@@ -8,3 +8,5 @@ alias scrutinize="SCRUTINY_HOST=dev02 /Users/Ari/M.\ Gemi/git/demandware-mgemi/b
 alias confidence="python ~/.dotfiles/scripts/Confidence.py"
 alias apt-get="brew"
 alias matrix="cmatrix"
+alias master="git checkout master"
+alias dev="git checkout development"
