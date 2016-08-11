@@ -89,3 +89,19 @@ function checkmerge() {
     echo "Usage: checkmerge src dest"
   fi
 }
+
+function findtext() {
+  if [ $# -eq 0 -o $# -gt 2 ]
+  then
+    echo "Usage: findtext text [dir]"
+    return
+  fi
+  TEXT="$1"
+  if [ $# -eq 2 ]
+  then
+    DIR="$2"
+  else
+    DIR="."
+  fi
+  grep -rnl "$DIR" -e "$TEXT"
+}
