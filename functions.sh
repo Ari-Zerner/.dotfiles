@@ -15,12 +15,6 @@ function sclean() {
     clearhistory
 }
 
-function rpn() {
-    pushd ~/Google\ Drive/Java\ Programs/RPN/
-    java -jar dist/RPN.jar
-    popd
-}
-
 function csssh() {
     if [ $# == 0 ]; then
         ssh -Y afz8559@siren.cs.rit.edu
