@@ -127,7 +127,7 @@ function findtext() {
 # Usage: cpvim oldFile newFile
 # Copies oldFile to newFile, then opens vim to edit newFile
 function cpvim() {
-    cp -i "$1" "$2"
+    cp "$1" "$2"
     vim "$2"
 }
 
