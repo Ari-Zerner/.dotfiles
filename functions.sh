@@ -123,3 +123,42 @@ function findtext() {
   fi
   grep -rnl "$DIR" -e "$TEXT"
 }
+
+# Usage: cpvim oldFile newFile
+# Copies oldFile to newFile, then opens vim to edit newFile
+function cpvim() {
+    cp -i "$1" "$2"
+    vim "$2"
+}
+
+# Usage: c source1 [source2] [-flag1] ...
+# Sources are the names of existing .c files but have no file extension
+# Flags are compiler flags passed on to gcc
+# Compiles the sources and links them into a program with the same name as source1, then runs the program
+# Deletes any previous version of the program and all object files created
+function c() {
+    if [[ $1 == *.c ]]
+    then
+        echo "Error: $0 takes a program name, not a source file."
+        return
+    fi
+    if [ -f "./$1" ]; then rm "./$1"; fi
+    GCC_C="gcc -c"
+    GCC_O="gcc -o $1"
+    RM="rm"
+    for ARG in $@
+    do
+        if [[ $ARG == -* ]]
+        then
+            GCC_C="$GCC_C $ARG"
+            GCC_O="$GCC_O $ARG"
+        else
+            GCC_C="$GCC_C $ARG.c"
+            GCC_O="$GCC_O $ARG.o"
+            RM="$RM $ARG.o"
+        fi
+    done
+    eval "$GCC_C; $GCC_O; $RM"
+    if [ -f "./$1" ]; then "./$1"; fi
+}
+
