@@ -1,5 +1,6 @@
 alias ls="ls -AFG"
 alias mv="mv -i"
+alias cp="cp -i"
 alias ln="ln -i"
 alias btc="telnet ticker.bitcointicker.co 10080"
 alias btctrade="python ~/.dotfiles/scripts/BTCTrade.py"
