@@ -35,6 +35,9 @@ def from_log_odds(l):
     p = float(o / (1 + o))
     return (p, o, l)
 
+def surprise(p):
+    return round_float(-log(p, 2))
+
 def main(argv):
     argc = len(argv)
     if argc < 2 or argc >= 4:
@@ -60,8 +63,11 @@ def main(argv):
             (p, o, l) = from_probability(float(arg))
         o = nice_fraction(o.numerator, o.denominator)
         print '%s = %s%% = %s:%s = %sdB' % (round_float(p), round_float(p * 100), o.numerator, o.denominator, round_float(l * 10))
-        print 'Surprise if true: %s bits' % round_float(-log(p, 2))
-        print 'Surprise if false: %s bits' % round_float(-log(1 - p, 2))
+        surpriseTrue = surprise(p)
+        surpriseFalse = surprise(1 - p)
+        print 'Surprise if true: %s bits' % surpriseTrue
+        print 'Surprise if false: %s bits' % surpriseFalse
+        print 'Expected surprise: %s bits' % round_float(p * surpriseTrue + (1 - p) * surpriseFalse)
     except ValueError:
         print 'Invalid confidence argument. Accepted formats are:'
         print 'X -> probability (0, 1)'
