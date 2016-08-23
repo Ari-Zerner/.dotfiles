@@ -1,0 +1,6 @@
+pushd ~/.dotfiles/ >/dev/null
+git stash
+git checkout master
+git pull
+for script in *.sh; do . "$script"; done
+popd >/dev/null
