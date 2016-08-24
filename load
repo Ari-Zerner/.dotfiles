@@ -1,6 +1,9 @@
-pushd ~/.dotfiles/ >/dev/null
+pushd ~/.dotfiles/
 git stash
 git checkout master
 git pull
 for script in *.sh; do . "$script"; done
-popd >/dev/null
+git checkout -
+git stash pop
+popd
+clear
