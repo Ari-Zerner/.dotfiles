@@ -165,6 +165,6 @@ function c() {
 # Usage: mkcd dir
 # mkdir dir && cd dir
 function mkcd() {
-    mkdir "$1"
+    mkdir -p "$1"
     cd "$1"
 }
