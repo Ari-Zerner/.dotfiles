@@ -162,3 +162,9 @@ function c() {
     if [ -f "./$1" ]; then "./$1"; fi
 }
 
+# Usage: mkcd dir
+# mkdir dir && cd dir
+function mkcd() {
+    mkdir "$1"
+    cd "$1"
+}
