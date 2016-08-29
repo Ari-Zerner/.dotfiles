@@ -68,8 +68,10 @@ def main(argv):
         print 'Surprise if true: %s bits' % surpriseTrue
         print 'Surprise if false: %s bits' % surpriseFalse
         print 'Expected surprise: %s bits' % round_float(p * surpriseTrue + (1 - p) * surpriseFalse)
-    except ValueError:
-        print 'Invalid confidence argument. Accepted formats are:'
+    except (ValueError, ZeroDivisionError):
+        print 'Invalid confidence argument or not enough precision.'
+        print 'The precision argument optionally follows the confidence argument.'
+        print 'Accepted confidence formats are:'
         print 'X -> probability (0, 1)'
         print 'X% -> percentage (0, 100)'
         print 'X:Y -> odds (0, infinity)'
