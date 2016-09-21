@@ -168,3 +168,18 @@ function mkcd() {
     mkdir -p "$1"
     cd "$1"
 }
+
+# Usage: revisions
+# Prints the Git revisions
+# Usage: revisions [revisions_file]
+# Writes the Git revisions to revisions_file
+function revisions() {
+    if [ $# == 0 ]
+        then git log --stat --pretty=short --graph
+    elif [ $# == 1 ]
+        then revisions > $1
+    else
+        echo "Usage: $0 [revisions_file]"
+    fi
+}
+
