@@ -23,13 +23,14 @@ function sclean() {
 
 # Usage: csssh [host]
 # SSHs into a CS@RIT computer
-# host defaults to siren
+# host defaults to oedipus
 function csssh() {
     if [ $# == 0 ]; then
-        ssh -Y afz8559@siren.cs.rit.edu
-    elif [ $# == 1 ]; then
-        ssh -Y afz8559@$1.cs.rit.edu
+        HOST="oedipus"
+    else
+        HOST="$1"
     fi
+    ssh -Y "afz8559@$HOST.cs.rit.edu"
 }
 
 # Usage: csftp [host]
