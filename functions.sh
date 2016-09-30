@@ -169,3 +169,12 @@ function mkcd() {
     mkdir -p "$1"
     cd "$1"
 }
+
+# Usage: pushchanges
+# Git: commits to current branch, merges to master, and pushes
+function pushchanges() {
+    git commit -a
+    git checkout master
+    git merge -
+    git push
+}
