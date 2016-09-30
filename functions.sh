@@ -184,3 +184,11 @@ function revisions() {
     fi
 }
 
+# Usage: pushchanges
+# Git: commits on current branch, merges to master, and pushes master
+function pushchanges() {
+    git commit -a
+    git checkout master
+    git merge -
+    git push
+}
