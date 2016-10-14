@@ -23,10 +23,9 @@ function sclean() {
 
 # Usage: csssh [host]
 # SSHs into a CS@RIT computer
-# host defaults to oedipus
 function csssh() {
     if [ $# == 0 ]; then
-        HOST="oedipus"
+        HOST="$CSRITHOST"
     else
         HOST="$1"
     fi
@@ -35,13 +34,13 @@ function csssh() {
 
 # Usage: csftp [host]
 # FTPs to a CS@RIT computer
-# host defaults to siren
 function csftp() {
     if [ $# == 0 ]; then
-        sftp afz8559@siren.cs.rit.edu
-    elif [ $# == 1 ]; then
-        sftp afz8559@$1.cs.rit.edu
+        HOST="$CSRITHOST"
+    else
+        HOST="$1"
     fi
+    sftp "afz8559@$HOST.cs.rit.edu"
 }
 
 # Usage: ssh-copy-id hostname
