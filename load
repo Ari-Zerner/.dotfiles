@@ -1,3 +1,4 @@
+{
 pushd ~/.dotfiles/
 git stash
 git checkout master
@@ -6,4 +7,4 @@ for script in *.sh; do . "$script"; done
 git checkout -
 git stash pop
 popd
-clear
+} 1>~/.dotfiles/load.out 2>~/.dotfiles/load.err
