@@ -36,11 +36,15 @@ def main(argv):
             if dollars:
                 print 'Ask: %s for %s' % (dollar_string(amount),\
                 btc_string((amount - ask_flat_fee) / price / ask_value_fee))
+                print 'Raw: %s = %s' % (dollar_string(amount),\
+                btc_string(amount / price))
                 print 'Bid: %s for %s' % (dollar_string(amount),\
                 btc_string((amount + bid_flat_fee) / price * bid_value_fee))
             else:
                 print 'Ask: %s for %s' %\
                 (dollar_string(amount * price * ask_value_fee + ask_flat_fee),\
+                btc_string(amount))
+                print 'Raw: %s = %s' % (dollar_string(amount * price),\
                 btc_string(amount))
                 print 'Bid: %s for %s' %\
                 (dollar_string(amount * price / bid_value_fee - bid_flat_fee),\
