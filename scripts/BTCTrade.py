@@ -1,16 +1,33 @@
 import urllib, json, sys
 
+# constants
 ask_flat_fee = 8
 ask_value_fee = 1.02
 bid_flat_fee = 8
 bid_value_fee = 1.02
+exchange = 'Coinbase'
 
-# get the BTC price from Coinbase
+# fetch JSON data from a URL
+def get_json(url):
+    return json.loads(urllib.urlopen(url).read())
+
+# get the BTC price from an exchange
 def get_price():
-    url = "https://api.coinbase.com/v2/prices/spot"
-    response = urllib.urlopen(url)
-    data = json.loads(response.read())["data"]
-    return float(data["amount"])
+    print 'Retrieving price from %s...' % exchange
+    try:
+        price = None
+        if exchange == 'Coinbase':
+            json = get_json('https://api.coinbase.com/v2/prices/spot')
+            price = json['data']['amount']
+        elif exchange == 'Gemini':
+            json = get_json('https://api.gemini.com/v1/pubticker/BTCUSD')
+            price = json['ask']
+        else:
+            raise Exception
+        print 'Retrieved price from %s.' % exchange
+        return float(price)
+    except Exception:
+        print 'Could not retrieve price from %s.' % exchange
 
 # format a dollar amount
 def dollar_string(amount):
@@ -23,6 +40,8 @@ def btc_string(amount):
 
 def main(argv):
     price = get_price()
+    if price == None:
+        return
     if len(argv) == 1:
         argv.append('B1')
     if len(argv) == 2:
