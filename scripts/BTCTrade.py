@@ -1,10 +1,6 @@
-import urllib, json, sys
+import urllib, json, sys, re
 
 # constants
-ask_flat_fee = 8
-ask_value_fee = 1.02
-bid_flat_fee = 8
-bid_value_fee = 1.02
 exchange = 'Coinbase'
 
 # fetch JSON data from a URL
@@ -13,7 +9,6 @@ def get_json(url):
 
 # get the BTC price from an exchange
 def get_price():
-    print 'Retrieving price from %s...' % exchange
     try:
         price = None
         if exchange == 'Coinbase':
@@ -39,12 +34,16 @@ def btc_string(amount):
     return '%.10g BTC (%.10g bits)' % (amount, 1000000 * amount)
 
 def main(argv):
-    price = get_price()
-    if price == None:
-        return
     if len(argv) == 1:
         argv.append('B1')
     if len(argv) == 2:
+        if re.match('^-?-?h(elp)?$', argv[1], re.IGNORECASE):
+            # this will print usage message
+            pass
+        else:
+            argv.append('0')
+            argv.append('0')
+    if len(argv) == 4:
         amount = argv[1]
         dollars = True
         if amount.startswith('B'):
@@ -52,25 +51,27 @@ def main(argv):
             amount = amount[1:]
         try:
             amount = float(amount)
+            flat_fee = float(argv[2])
+            value_fee = float(argv[3]) / 100 + 1
+            price = get_price()
+            if price == None:
+                return
+            print 'Fee is $%s plus %s percent.' % (argv[2], argv[3])
             if dollars:
                 print 'Ask: %s for %s' % (dollar_string(amount),\
-                btc_string((amount - ask_flat_fee) / price / ask_value_fee))
-                print 'Raw: %s = %s' % (dollar_string(amount),\
-                btc_string(amount / price))
+                btc_string((amount - flat_fee) / price / value_fee))
                 print 'Bid: %s for %s' % (dollar_string(amount),\
-                btc_string((amount + bid_flat_fee) / price * bid_value_fee))
+                btc_string((amount + flat_fee) / price * value_fee))
             else:
                 print 'Ask: %s for %s' %\
-                (dollar_string(amount * price * ask_value_fee + ask_flat_fee),\
-                btc_string(amount))
-                print 'Raw: %s = %s' % (dollar_string(amount * price),\
+                (dollar_string(amount * price * value_fee + flat_fee),\
                 btc_string(amount))
                 print 'Bid: %s for %s' %\
-                (dollar_string(amount * price / bid_value_fee - bid_flat_fee),\
+                (dollar_string(amount * price / value_fee - flat_fee),\
                 btc_string(amount))
         except ValueError:
-            print 'Amount must be a number, optionally preceeded by a B.'
+            print 'Arguments must be numbers. Amount may be preceeded by a B.'
     else:
-        print 'usage: btctrade [amount]'
+        print 'usage: btctrade [amount] [flat_fee value_fee_percent]'
 
 main(sys.argv)
