@@ -9,3 +9,6 @@ alias matrix="cmatrix"
 alias master="git checkout master"
 alias dev="git checkout development; git merge master"
 alias gcc="gcc -std=c99 -Wall -Wextra -pedantic"
+
+# see https://github.com/nvbn/thefuck
+thefuck --alias
