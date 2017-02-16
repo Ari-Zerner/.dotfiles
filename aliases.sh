@@ -11,4 +11,4 @@ alias dev="git checkout development; git merge master"
 alias gcc="gcc -std=c99 -Wall -Wextra -pedantic"
 
 # see https://github.com/nvbn/thefuck
-thefuck --alias
+eval "$(thefuck --alias)"
