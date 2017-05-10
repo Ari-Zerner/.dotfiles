@@ -191,3 +191,7 @@ function pushchanges() {
     git merge -
     git push
 }
+
+function rpn() {
+    (cd ~/.dotfiles/scripts/RPN && java rpn.RPN $@)
+}

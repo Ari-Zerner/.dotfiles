@@ -13,7 +13,7 @@ import static rpn.Token.*;
 /**
  * Controls an RPNCalculator using the console to interface with the user.
  */
-public class ConsoleViewController {
+public class RPN {
 
     /*
      * All output should be formatted such that: "> " begins lines that require
@@ -87,7 +87,7 @@ public class ConsoleViewController {
     /**
      * Creates a ConsoleViewController with trace initialized to false.
      */
-    public ConsoleViewController() {
+    public RPN() {
         this(false);
     }
 
@@ -96,7 +96,7 @@ public class ConsoleViewController {
      * value.
      * @param trace the initial trace value
      */
-    public ConsoleViewController(boolean trace) {
+    public RPN(boolean trace) {
         this.trace = trace;
     }
 
@@ -613,7 +613,7 @@ public class ConsoleViewController {
      * @param args the arguments passed to the calculator
      */
     public static void main(String[] args) {
-        ConsoleViewController cvc = new ConsoleViewController();
+        RPN cvc = new RPN();
         if (args.length > 0) {
             Token[] tokens = new Token[args.length];
             for (int i = 0; i < tokens.length; i++) {

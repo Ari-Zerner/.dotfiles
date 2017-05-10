@@ -10,7 +10,6 @@ alias master="git checkout master"
 alias dev="git checkout development; git merge master"
 alias gcc="gcc -std=c99 -Wall -Wextra -pedantic"
 alias ip="curl ifconfig.co"
-alias rpn="(cd ~/.dotfiles/scripts/RPN && exec java -jar RPN.jar)"
 
 # see https://github.com/nvbn/thefuck
 eval "$(thefuck --alias)"
