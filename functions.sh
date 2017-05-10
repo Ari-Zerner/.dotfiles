@@ -192,6 +192,10 @@ function pushchanges() {
     git push
 }
 
+# Usage: rpn
+# Runs an RPN calculator in interactive mode
+# Usage: rpn tok1 tok2 tok3...
+# Runs an RPN calculator on the given tokens
 function rpn() {
     (cd ~/.dotfiles/scripts/RPN && java rpn.RPN $@)
 }
