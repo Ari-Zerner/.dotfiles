@@ -199,3 +199,11 @@ function pushchanges() {
 function rpn() {
     (cd ~/.dotfiles/scripts/RPN && java rpn.RPN $@)
 }
+
+# Usage mockload
+# Runs the dotfile loading script, minus the parts involving git
+function mockload() {
+    pushd ~/.dotfiles/ 1>/dev/null
+    for script in *.sh; do . "$script"; done
+    popd 1>/dev/null
+}
