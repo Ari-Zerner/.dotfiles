@@ -43,12 +43,6 @@ function csftp() {
     sftp "afz8559@$HOST.cs.rit.edu"
 }
 
-# Usage: lightsailssh
-# SSHs into Lightsail
-function lightsailssh() {
-  ssh "$LIGHTSAIL_USER@$LIGHTSAIL_HOST"
-}
-
 # Usage: ssh-copy-id hostname
 # Copies SSH public key from local computer to a remote host
 function ssh-copy-id() {
