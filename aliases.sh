@@ -13,7 +13,7 @@ alias ip="curl ifconfig.co"
 alias gittree="git log --graph --full-history --all --color \
   --pretty=format:\"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s\""
 alias fucking="sudo"
-alias russianroulette="[ $[ $RANDOM % 6 ] == 0 ] && echo Boom || echo Click"
+alias russianroulette="[ \$[ \$RANDOM % 6 ] == 0 ] && echo Boom || echo Click"
 
 # see https://github.com/nvbn/thefuck
 eval "$(thefuck --alias)"
