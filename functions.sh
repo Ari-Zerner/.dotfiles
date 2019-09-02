@@ -9,8 +9,13 @@ function clearhistory() {
 # Usage: clean
 # Clears Downloads, Trash, and bash history
 function clean() {
-    rm -rf ~/Downloads/ ~/.Trash/
-    clearhistory
+    read -p "Clear downloads, trash, and bash history? " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        rm -rf ~/Downloads/ ~/.Trash/
+        clearhistory
+    fi
 }
 
 # Usage: sclean
