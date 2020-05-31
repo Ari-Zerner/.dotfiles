@@ -1,10 +1,22 @@
 {
+echo "Pushing dotfiles directory"
 pushd ~/.dotfiles/
+echo
+
+echo "Getting master dotfiles"
 git stash
 git checkout master
 git pull
-for script in *.sh; do . "$script"; done
+echo
+
+for script in *.sh; do echo "Executing $script"; . "$script"; done
+echo
+
+echo "Restoring local dotfiles"
 git checkout -
 git stash pop
+echo
+
+echo "Popping dotfiles directory"
 popd
 } 1>~/.dotfiles/load.out 2>~/.dotfiles/load.err
