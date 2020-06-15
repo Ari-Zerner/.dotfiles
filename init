@@ -1,0 +1,16 @@
+pushd ~ > /dev/null
+git clone https://github.com/Ari-Zerner/.dotfiles
+loadCmd=". ~/.dotfiles/load"
+eval $loadCmd
+for configFile in ".bash_profile" ".bash_login" ".profile" ""; do
+  if [[ -z $configFile ]]; then
+    echo "No config file found. Add \"$loadCmd\" to config file to load dotfiles at startup."
+    break
+  fi
+  if [[ -f $configFile ]]; then
+    echo "$loadCmd" >> "$configFile"
+    echo "\"$loadCmd\" added to $configFile"
+    break
+  fi
+done
+popd > /dev/null
