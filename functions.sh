@@ -54,11 +54,11 @@ function ssh-copy-id() {
     cat ~/.ssh/id_rsa.pub | ssh $1 "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"
 }
 
-# Usage: hash algorithm file [expected]
-# Usage: hash -m algorithm message [expected]
+# Usage: myhash algorithm file [expected]
+# Usage: myhash -m algorithm message [expected]
 # Hashes a message or file using the given algorithm
 # If expected is provided, compares the hash to expected
-function hash() {
+function myhash() {
     if [[ $1 == "-m" ]]
     then
         FILE=".hash.tmp"
