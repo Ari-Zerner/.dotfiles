@@ -1,7 +1,13 @@
-# @gf3’s Sexy Bash Prompt, inspired by “Extravagant Zsh Prompt”
-# Shamelessly copied from https://github.com/gf3/dotfiles
+#!/usr/bin/env sh
 
-default_username='Ari'
+# Detect the current shell
+if [ -n "$ZSH_VERSION" ]; then
+    CURRENT_SHELL="zsh"
+elif [ -n "$BASH_VERSION" ]; then
+    CURRENT_SHELL="bash"
+else
+    CURRENT_SHELL="sh"
+fi
 
 if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
   export TERM=gnome-256color
@@ -45,20 +51,13 @@ function parse_git_branch() {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
 }
 
-# Only show username/host if not default
-function usernamehost() {
-  if [ $USER != $default_username ]; then echo "${MAGENTA}$USER ${WHITE}at ${ORANGE}$HOSTNAME ${WHITE}in "; fi
-}
-
-# iTerm Tab and Title Customization and prompt customization
-# http://sage.ucsc.edu/xtal/iterm_tab_customization.html
-
-# Put the string " [bash]   hostname::/full/directory/path"
-# in the title bar using the command sequence
-# \[\e]2;[bash]   \h::\]$PWD\[\a\]
-
-# Put the penultimate and current directory
-# in the iterm tab
-# \[\e]1;\]$(basename $(dirname $PWD))/\W\[\a\]
-
-PS1="\$(date \"+%b %d %H:%M\")  \[\e]2;$PWD\[\a\]\[\e]1;\]$(basename "$(dirname "$PWD")")/\W\[\a\]${BOLD}\$(usernamehost)\[$GREEN\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(parse_git_branch)\[$WHITE\]\n\$ \[$RESET\]"
+# Shell-specific prompt settings
+if [ "$CURRENT_SHELL" = "zsh" ]; then
+    # ZSH-specific prompt
+    setopt PROMPT_SUBST
+    PROMPT='$(date "+%b %d %H:%M")  %{$BOLD%}%{$GREEN%}%~%{$WHITE%}$([[ -n $(git branch 2> /dev/null) ]] && echo " on ")%{$PURPLE%}$(parse_git_branch)%{$WHITE%}
+$ %{$RESET%}'
+elif [ "$CURRENT_SHELL" = "bash" ]; then
+    # Bash-specific prompt
+    PS1="\$(date \"+%b %d %H:%M\")  \[\e]2;$PWD\[\a\]\[\e]1;\]$(basename "$(dirname "$PWD")")/\W\[\a\]${BOLD}\[$GREEN\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(parse_git_branch)\[$WHITE\]\n\$ \[$RESET\]"
+fi

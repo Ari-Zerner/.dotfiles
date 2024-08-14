@@ -1,15 +1,20 @@
 # Usage: clearhistory
-# Clears bash history
+# Clears shell history
 function clearhistory() {
     clear
-    cat /dev/null > ~/.bash_history
-    history -cw
+    if [ -n "$ZSH_VERSION" ]; then
+        history -c
+        rm -f $HISTFILE
+    elif [ -n "$BASH_VERSION" ]; then
+        cat /dev/null > ~/.bash_history
+        history -cw
+    fi
 }
 
 # Usage: clean
-# Clears Downloads, Trash, and bash history
+# Clears Downloads, Trash, and shell history
 function clean() {
-    read -p "Clear downloads, trash, and bash history? " -n 1 -r
+    read -p "Clear downloads, trash, and shell history? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
@@ -19,9 +24,13 @@ function clean() {
 }
 
 # Usage: sclean
-# Securely clears Downloads, Trash, and bash history
+# Securely clears Downloads, Trash, and shell history
 function sclean() {
-    rm -fP .bash_history
+    if [ -n "$ZSH_VERSION" ]; then
+        rm -fP $HISTFILE
+    elif [ -n "$BASH_VERSION" ]; then
+        rm -fP ~/.bash_history
+    fi
     rm -rfP ~/Downloads/ ~/.Trash/
     clearhistory
 }
@@ -209,6 +218,6 @@ function rpn() {
 # Runs the dotfile loading script, minus the parts involving git
 function mockload() {
     pushd ~/.dotfiles/ 1>/dev/null
-    for script in *.sh; do . "$script"; done
+    for script in *.sh; do source "./$script"; done
     popd 1>/dev/null
 }

@@ -1,16 +1,39 @@
-pushd ~ > /dev/null
+#!/usr/bin/env sh
+
+# Detect the current shell
+if [ -n "$ZSH_VERSION" ]; then
+    CURRENT_SHELL="zsh"
+elif [ -n "$BASH_VERSION" ]; then
+    CURRENT_SHELL="bash"
+else
+    CURRENT_SHELL="sh"
+fi
+
+pushd ~ > /dev/null 2>&1 || exit
 git clone https://github.com/Ari-Zerner/.dotfiles
 loadCmd=". ~/.dotfiles/load"
-eval $loadCmd
-for configFile in ".bash_profile" ".bash_login" ".profile" ""; do
-  if [[ -z $configFile ]]; then
-    echo "No config file found. Add \"$loadCmd\" to config file to load dotfiles at startup."
-    break
-  fi
-  if [[ -f $configFile ]]; then
+
+# Determine the appropriate config file
+if [ "$CURRENT_SHELL" = "zsh" ]; then
+    configFile=".zshrc"
+elif [ "$CURRENT_SHELL" = "bash" ]; then
+    for possibleConfig in ".bash_profile" ".bash_login" ".profile"; do
+        if [ -f "$possibleConfig" ]; then
+            configFile="$possibleConfig"
+            break
+        fi
+    done
+fi
+
+if [ -z "$configFile" ]; then
+    echo "No config file found. Add \"$loadCmd\" to your shell's config file to load dotfiles at startup."
+else
     echo "$loadCmd" >> "$configFile"
     echo "\"$loadCmd\" added to $configFile"
-    break
-  fi
-done
-popd > /dev/null
+fi
+
+# Run load immediately after setup
+eval "$loadCmd"
+
+popd > /dev/null 2>&1 || exit
+

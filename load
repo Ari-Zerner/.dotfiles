@@ -1,7 +1,17 @@
+#!/usr/bin/env sh
+
+# Detect the current shell
+if [ -n "$ZSH_VERSION" ]; then
+    CURRENT_SHELL="zsh"
+elif [ -n "$BASH_VERSION" ]; then
+    CURRENT_SHELL="bash"
+else
+    CURRENT_SHELL="sh"
+fi
+
 {
 echo "Pushing dotfiles directory"
-pushd ~/.dotfiles/
-echo
+pushd ~/.dotfiles/ > /dev/null 2>&1 || exit
 
 echo "Getting master dotfiles"
 git stash
@@ -9,8 +19,13 @@ git checkout master
 git pull
 echo
 
-for script in *.sh; do echo "Executing $script"; . "$script"; done
-echo
+# Source all .sh files
+for script in *.sh; do
+    if [ -f "$script" ]; then
+        echo "Executing $script"
+        source "./$script"
+    fi
+done
 
 echo "Restoring local dotfiles"
 git checkout -
@@ -18,5 +33,5 @@ git stash pop
 echo
 
 echo "Popping dotfiles directory"
-popd
+popd > /dev/null 2>&1 || exit
 } 1>~/.dotfiles/load.out 2>~/.dotfiles/load.err
