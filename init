@@ -1,39 +1,43 @@
 #!/usr/bin/env sh
 
-# Detect the current shell
-if [ -n "$ZSH_VERSION" ]; then
-    CURRENT_SHELL="zsh"
-elif [ -n "$BASH_VERSION" ]; then
-    CURRENT_SHELL="bash"
+# Check if ~/.dotfiles already exists
+if [ ! -d "$HOME/.dotfiles" ]; then
+    # Detect the current shell
+    if [ -n "$ZSH_VERSION" ]; then
+        CURRENT_SHELL="zsh"
+    elif [ -n "$BASH_VERSION" ]; then
+        CURRENT_SHELL="bash"
+    else
+        CURRENT_SHELL="sh"
+    fi
+
+    pushd ~ > /dev/null 2>&1 || exit
+    git clone https://github.com/Ari-Zerner/.dotfiles
+    loadCmd=". ~/.dotfiles/load"
+
+    # Determine the appropriate config file
+    if [ "$CURRENT_SHELL" = "zsh" ]; then
+        configFile=".zshrc"
+    elif [ "$CURRENT_SHELL" = "bash" ]; then
+        for possibleConfig in ".bash_profile" ".bash_login" ".profile"; do
+            if [ -f "$possibleConfig" ]; then
+                configFile="$possibleConfig"
+                break
+            fi
+        done
+    fi
+
+    if [ -z "$configFile" ]; then
+        echo "No config file found. Add \"$loadCmd\" to your shell's config file to load dotfiles at startup."
+    else
+        echo "$loadCmd" >> "$configFile"
+        echo "\"$loadCmd\" added to $configFile"
+    fi
+
+    # Run load immediately after setup
+    eval "$loadCmd"
+
+    popd > /dev/null 2>&1 || exit
 else
-    CURRENT_SHELL="sh"
+    echo "~/.dotfiles already exists. Skipping installation."
 fi
-
-pushd ~ > /dev/null 2>&1 || exit
-git clone https://github.com/Ari-Zerner/.dotfiles
-loadCmd=". ~/.dotfiles/load"
-
-# Determine the appropriate config file
-if [ "$CURRENT_SHELL" = "zsh" ]; then
-    configFile=".zshrc"
-elif [ "$CURRENT_SHELL" = "bash" ]; then
-    for possibleConfig in ".bash_profile" ".bash_login" ".profile"; do
-        if [ -f "$possibleConfig" ]; then
-            configFile="$possibleConfig"
-            break
-        fi
-    done
-fi
-
-if [ -z "$configFile" ]; then
-    echo "No config file found. Add \"$loadCmd\" to your shell's config file to load dotfiles at startup."
-else
-    echo "$loadCmd" >> "$configFile"
-    echo "\"$loadCmd\" added to $configFile"
-fi
-
-# Run load immediately after setup
-eval "$loadCmd"
-
-popd > /dev/null 2>&1 || exit
-
