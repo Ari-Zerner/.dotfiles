@@ -23,12 +23,14 @@ if tput setaf 1 &> /dev/null; then
     GREEN=$(tput setaf 190)
     PURPLE=$(tput setaf 141)
     WHITE=$(tput setaf 256)
+    CYAN=$(tput setaf 45)
   else
     MAGENTA=$(tput setaf 5)
     ORANGE=$(tput setaf 4)
     GREEN=$(tput setaf 2)
     PURPLE=$(tput setaf 1)
     WHITE=$(tput setaf 7)
+    CYAN=$(tput setaf 6)
   fi
   BOLD=$(tput bold)
   RESET=$(tput sgr0)
@@ -38,6 +40,7 @@ else
   GREEN="\033[1;32m"
   PURPLE="\033[1;35m"
   WHITE="\033[1;37m"
+  CYAN="\033[1;36m"
   BOLD=""
   RESET="\033[m"
 fi
@@ -51,13 +54,21 @@ function parse_git_branch() {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
 }
 
+# Function to get SSH information
+function get_ssh_info() {
+  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    echo "${USER}@${HOSTNAME}"
+  fi
+}
+
 # Shell-specific prompt settings
 if [ "$CURRENT_SHELL" = "zsh" ]; then
     # ZSH-specific prompt
     setopt PROMPT_SUBST
-    PROMPT='$(date "+%b %d %H:%M")  %{$BOLD%}%{$GREEN%}%~%{$WHITE%}$([[ -n $(git branch 2> /dev/null) ]] && echo " on ")%{$PURPLE%}$(parse_git_branch)%{$WHITE%}
+    PROMPT='$(date "+%b %d %H:%M") %{$CYAN%}$(get_ssh_info)%{$WHITE%}  %{$BOLD%}%{$GREEN%}%~%{$WHITE%}$([[ -n $(git branch 2> /dev/null) ]] && echo " on ")%{$PURPLE%}$(parse_git_branch)%{$WHITE%}
 $ %{$RESET%}'
 elif [ "$CURRENT_SHELL" = "bash" ]; then
     # Bash-specific prompt
-    PS1="\$(date \"+%b %d %H:%M\")  \[\e]2;$PWD\[\a\]\[\e]1;\]$(basename "$(dirname "$PWD")")/\W\[\a\]${BOLD}\[$GREEN\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(parse_git_branch)\[$WHITE\]\n\$ \[$RESET\]"
+    PS1="\$(date \"+%b %d %H:%M\") \[$CYAN\]\$(get_ssh_info)\[$WHITE\]  \[\e]2;$PWD\[\a\]\[\e]1;\]$(basename "$(dirname "$PWD")")/\W\[\a\]${BOLD}\[$GREEN\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(parse_git_branch)\[$WHITE\]\n\$ \[$RESET\]"
 fi
+
