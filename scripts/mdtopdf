@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+# Convert Markdown to PDF using md-to-pdf.fly.dev API
+
+set -e
+
+usage() {
+    echo "Usage: mdtopdf <input.md> [output.pdf] [options]"
+    echo ""
+    echo "Options:"
+    echo "  -c, --css FILE      CSS file to apply"
+    echo "  -e, --engine ENGINE PDF engine: weasyprint (default), wkhtmltopdf, or pdflatex"
+    echo "  -h, --help          Show this help message"
+    exit 1
+}
+
+if [[ $# -lt 1 ]]; then
+    usage
+fi
+
+INPUT=""
+OUTPUT=""
+CSS=""
+ENGINE=""
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -c|--css)
+            CSS="$2"
+            shift 2
+            ;;
+        -e|--engine)
+            ENGINE="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            ;;
+        *)
+            if [[ -z "$INPUT" ]]; then
+                INPUT="$1"
+            elif [[ -z "$OUTPUT" ]]; then
+                OUTPUT="$1"
+            else
+                echo "Error: Unknown argument '$1'"
+                usage
+            fi
+            shift
+            ;;
+    esac
+done
+
+if [[ -z "$INPUT" ]]; then
+    echo "Error: No input file specified"
+    usage
+fi
+
+if [[ ! -f "$INPUT" ]]; then
+    echo "Error: Input file '$INPUT' not found"
+    exit 1
+fi
+
+# Default output filename
+if [[ -z "$OUTPUT" ]]; then
+    OUTPUT="${INPUT%.md}.pdf"
+fi
+
+# Build curl arguments
+CURL_ARGS=(--data-urlencode "markdown=$(cat "$INPUT")")
+
+if [[ -n "$CSS" ]]; then
+    if [[ ! -f "$CSS" ]]; then
+        echo "Error: CSS file '$CSS' not found"
+        exit 1
+    fi
+    CURL_ARGS+=(--data-urlencode "css=$(cat "$CSS")")
+fi
+
+if [[ -n "$ENGINE" ]]; then
+    CURL_ARGS+=(--data-urlencode "engine=$ENGINE")
+fi
+
+CURL_ARGS+=(--output "$OUTPUT")
+CURL_ARGS+=("https://md-to-pdf.fly.dev")
+
+curl "${CURL_ARGS[@]}"
+
+echo "Created $OUTPUT"
