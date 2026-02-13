@@ -13,12 +13,6 @@ fi
 echo "Pushing dotfiles directory"
 pushd ~/.dotfiles/ > /dev/null 2>&1 || exit
 
-echo "Getting master dotfiles"
-git stash
-git checkout master
-git pull
-echo
-
 # Source all .sh files
 for script in *.sh; do
     if [ -f "$script" ]; then
@@ -26,11 +20,6 @@ for script in *.sh; do
         source "./$script"
     fi
 done
-
-echo "Restoring local dotfiles"
-git checkout -
-git stash pop
-echo
 
 echo "Popping dotfiles directory"
 popd > /dev/null 2>&1 || exit
