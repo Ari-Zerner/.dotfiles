@@ -7,4 +7,7 @@ case $BASEDIR in
   accounting) # accounting with hledger
     alias h="hledger"
     ;;
+  journallm)
+    alias journallm="python journallm.py --add-to-journal JournalLM"
+    ;;
 esac
