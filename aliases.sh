@@ -16,8 +16,8 @@ alias gittree="git log --graph --full-history --all --color \
 alias fucking="sudo"
 alias russianroulette="[ \$[ \$RANDOM % 6 ] == 0 ] && echo Boom || echo Click"
 alias vs="open -a 'Visual Studio Code'"
-alias c="claude"
-alias cr="claude --resume"
+alias c="claude --permission-mode auto --remote-control"
+alias cr="c --resume"
 
 # see https://github.com/nvbn/thefuck
 eval "$(thefuck --alias)"
